@@ -14,11 +14,22 @@ int checker(int answer[SIZE][SIZE]) {
 	int i = 0;
 	int j = 0;
 	int hCheck[SIZE];
+	int verticalCol[SIZE];
+	int vertColIndex = 0;
 
 	// horizontal
 	// for (i = 0; i < SIZE; i++) {
-	// 	horizontalCheck(answer[i]);
+	// 	lineCheck(answer[i]);
 	// }
+
+	// vertical
+	while (verticalColIndex != SIZE) {
+		for (i=0; i<SIZE; i++) {
+			verticalCol[i] = answer[i][vertColIndex];
+		}
+		lineCheck(verticalCol);
+		verticalColIndex++;
+	}
 }
 
 int isPresent(int element, int present[SIZE], int presentLastIndex) {
@@ -33,7 +44,7 @@ int isPresent(int element, int present[SIZE], int presentLastIndex) {
 	return -1;
 }
 
-int horizontalCheck(int row[SIZE]) {
+int lineCheck(int row[SIZE]) {
 	int i = 0;
 	int ret = 0;
 	int present[SIZE];
@@ -58,7 +69,7 @@ int main() {
 	int arr[] = {1, 2, 9, 3, 4, 5, 6, 7, 8};
 	int ret = 0;
 
-	ret = horizontalCheck(arr);
+	ret = lineCheck(arr);
 	printf("ret: %d\n", ret);
 
 	return 0;
