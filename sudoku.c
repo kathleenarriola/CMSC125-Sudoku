@@ -10,7 +10,7 @@ void randomize(int n) {
 	}
 }
 
-int checker(int * answer) {
+int checker(int answer[SIZE][SIZE]) {
 	int i = 0;
 	int j = 0;
 	int hCheck[SIZE];
@@ -21,7 +21,7 @@ int checker(int * answer) {
 	// }
 }
 
-int isPresent(int element, int * present, int presentLastIndex) {
+int isPresent(int element, int present[SIZE], int presentLastIndex) {
 	int i = 0;
 
 	for (i = 0; i < presentLastIndex; i++) {
@@ -32,15 +32,6 @@ int isPresent(int element, int * present, int presentLastIndex) {
 
 	return -1;
 }
-
-void clearPresent(int * present) {
-	int i=0;
-
-	for (i = 0; i < SIZE; i++) {
-		present[i] = 0;
-	}
-}
-
 
 int horizontalCheck(int row[SIZE]) {
 	int i = 0;
@@ -58,11 +49,17 @@ int horizontalCheck(int row[SIZE]) {
 		}
 	}
 
-	clearPresent(present);
+	return 1;
 }
 
 int main() {
 	printf("Hello\n");
 	int board[SIZE][SIZE];
+	int arr[] = {1, 2, 9, 3, 4, 5, 6, 7, 8};
+	int ret = 0;
+
+	ret = horizontalCheck(arr);
+	printf("ret: %d\n", ret);
+
 	return 0;
 }
