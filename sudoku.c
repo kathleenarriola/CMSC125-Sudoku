@@ -39,6 +39,16 @@
 #define EIGHT '8'
 #define NINE '9'
 
+#define TL -1
+#define TM -2
+#define TR -3
+#define ML -4
+#define MM -5
+#define MR -6
+#define LR -7
+#define LM -8
+#define LL -9
+
 /* global variables */
 int board[SIZE][SIZE] = { 0 };
 int perm_board[SIZE][SIZE] = { 0 };
@@ -47,6 +57,7 @@ int active_cell_y;
 int active_x;
 int active_y;
 int isWinner;
+int boxIndex;
 char keypress;
 
 void erase(int x, int y, int w, int h);
@@ -73,6 +84,7 @@ int checker(int answer[SIZE][SIZE]);
 int main() {
     set_graphics(VGA_320X200X256);
     do {
+        srand(time());
         erase(1,1,400,220);
         homeScreen();
         keypress = (char)getch();
@@ -86,9 +98,6 @@ int main() {
         else if (keypress == HARD_ROUND) {
             randomize(HARD);
         }
-        // else if (keypress == QUIT) {
-        //     exitScreen();
-        // }
         game();
         
     } while (keypress != QUIT);
@@ -153,11 +162,9 @@ void game() {
             	if (checker(board) == 1) {
 		            erase(1,1, 400, 220);
 		            write_text("Winner", 120, 50, BLACK, 1);
-		            //exitScreen();
 		        } else {
 		            erase(1,1, 400, 220);
-		            write_text("You Loose", 120, 50, BLACK, 1);
-		            //exitScreen();
+		            write_text("You Lose", 120, 50, BLACK, 1);
 		        }
 		        break;
 		    case QUIT:
@@ -173,7 +180,7 @@ void game() {
             write_text("Winner", 120, 50, BLACK, 1);
         } else {
             erase(1,1, 400, 220);
-            write_text("You Loose", 120, 50, BLACK, 1);
+            write_text("You Lose", 120, 50, BLACK, 1);
         }
     } else if (keypress == QUIT) {
         exitScreen();
@@ -201,7 +208,7 @@ void clearCell(int x, int y){
              write_pixel(i,j,WHITE);
         }
     }
-    write_text("X", active_x, active_y, WHITE, 0);
+    write_text("-", active_x, active_y, WHITE, 0);
 }
 
 void drawBoard(){
@@ -290,9 +297,8 @@ void findActiveCell() {
 }
 
 void moveUP() {
-    if ((active_cell_x - 1) >= 0) {
+    if ((active_cell_x - 1) >= 0 && (active_y - 20) >- 20) {
         clearCell(active_x,active_y);
-        //write_text(" ", active_x, active_y, WHITE, 0);
         while (perm_board[active_cell_x-1][active_cell_y] == 1) {
             active_cell_x -= 1;
             active_y -= 20;
@@ -306,7 +312,6 @@ void moveUP() {
 void moveDown() {
     if ((active_cell_x + 1) < 9 && (active_y + 20) < 200) {
         clearCell(active_x,active_y);
-        write_text(" ", active_x, active_y, WHITE, 0);
         while (perm_board[active_cell_x+1][active_cell_y] == 1) {
             active_cell_x += 1;
             active_y += 20;
@@ -320,7 +325,6 @@ void moveDown() {
 void moveRight() {
     if ((active_cell_y + 1) < 9 && (active_x + 20) < 400) {
         clearCell(active_x,active_y);
-        write_text(" ", active_x, active_y, WHITE, 0);
         while (perm_board[active_cell_x][active_cell_y+1] == 1) {
             active_cell_y += 1;
             active_x += 20;
@@ -334,7 +338,6 @@ void moveRight() {
 void moveLeft() {
     if ((active_cell_y - 1) >= 0 && (active_x - 20) >= 100) {
         clearCell(active_x,active_y);
-        write_text(" ", active_x, active_y, WHITE, 0);
         while (perm_board[active_cell_x][active_cell_y-1] == 1) {
             active_cell_y -= 1;
             active_x -= 20;
@@ -468,6 +471,40 @@ int isPresent(int element, int present[SIZE], int presentLastIndex) {
 
 	return -1;
 }
+
+void checkBox(int x, int y) {
+    int i, j;
+    int TL[SIZE][2] = {
+        {0,0}, {0,3}, {0,6}, {3,0}, {3,3}, {3,6}, {6,0}, {6,3}, {6,6}
+    };
+    int TM[SIZE][2] = {
+        {0,1}, {0,4}, {0,7}, {3,1}, {3,4}, {3,7}, {6,1}, {6,4}, {6,7}
+    };
+    int TR[SIZE][2] = {
+        {0,2}, {0,5}, {0,8}, {3,2}, {3,5}, {3,8}, {6,2}, {6,5}, {6,8}
+    };
+    int ML[SIZE][2] = {
+        {1,0}, {1,3}, {1,6}, {4,0}, {4,3}, {4,6}, {7,0}, {7,3}, {7,6}
+    };
+    int MM[SIZE][2] = {
+        {1,1}, {1,4}, {1,7}, {4,1}, {4,4}, {4,7}, {7,1}, {7,4}, {7,7}
+    };
+    int MR[SIZE][2] = {
+        {1,2}, {1,5}, {1,8}, {4,2}, {4,5}, {4,8}, {7,2}, {7,5}, {7,8}
+    };
+    int LL[SIZE][2] = {
+        {2,0}, {2,3}, {2,6}, {5,0}, {5,3}, {5,6}, {8,0}, {8,3}, {8,6}
+    };
+    int LM[SIZE][2] = {
+        {2,1}, {2,4}, {2,7}, {5,1}, {5,4}, {5,7}, {8,1}, {8,4}, {8,7}
+    };
+    int LR[SIZE][2] = {
+        {2,2}, {2,5}, {2,8}, {5,2}, {5,5}, {5,8}, {8,2}, {8,3}, {8,8}
+    };
+
+        
+}
+
 int lineCheck(int row[SIZE]) {
 	int i = 0;
 	int ret = 0;
