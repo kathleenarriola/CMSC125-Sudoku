@@ -29,15 +29,15 @@
 #define MEDIUM_ROUND 'm'
 #define HARD_ROUND 'h'
 
-#define ONE 1
-#define TWO 2
-#define THREE 3
-#define FOUR 4
-#define FIVE 5
-#define SIX 6
-#define SEVEN 7
-#define EIGHT 8
-#define NINE 9
+#define ONE '1'
+#define TWO '2'
+#define THREE '3'
+#define FOUR '4'
+#define FIVE '5'
+#define SIX '6'
+#define SEVEN '7'
+#define EIGHT '8'
+#define NINE '9'
 
 /* global variables */
 int board[SIZE][SIZE] = { 0 };
@@ -60,6 +60,7 @@ void moveDown();
 void moveLeft();
 void moveRight();
 void clearCell(int x, int y);
+void writeNumber(char num);
 
 void randomize(int n);
 int randomNum();
@@ -118,22 +119,31 @@ void game() {
                 moveRight();
                 break;
             case ONE:
+                writeNumber(ONE);
                 break;
             case TWO:
+                writeNumber(TWO);
                 break;
             case THREE:
+                writeNumber(THREE);
                 break;
             case FOUR:
+                writeNumber(FOUR);
                 break;
             case FIVE:
+                writeNumber(FIVE);
                 break;
             case SIX:
+                writeNumber(SIX);
                 break;
             case SEVEN:
+                writeNumber(SEVEN);
                 break;
             case EIGHT:
+                writeNumber(EIGHT);
                 break;
             case NINE:
+                writeNumber(NINE);
                 break;
         }
     }while (keypress != SUBMIT || keypress != QUIT);
@@ -155,12 +165,7 @@ void erase(int x, int y, int w, int h){
 }
 
 void clearCell(int x, int y){
-    int i,j;
-    for (i = y; i <= x+20; i++){
-        for (j = x; j <= y+20; j++){
-            write_pixel(j,i,WHITE);
-        }
-    }
+    write_text("X", active_x, active_y, WHITE, 0);
 }
 
 void drawBoard(){
@@ -170,7 +175,7 @@ void drawBoard(){
     y_coor = 10;
     
     erase(1,1,400,220);
-    write_text("0-9", 5, 10, BLACK, 0);
+    write_text("1-9", 5, 10, BLACK, 0);
     write_text("W:UP", 5, 30, BLACK, 0);
     write_text("A:LEFT", 5, 50, BLACK, 0);
     write_text("S:DOWN", 5, 70, BLACK, 0);
@@ -308,9 +313,12 @@ void highlightCell() {
     write_text("X", active_x, active_y, RED, 0);
 }
 
+void writeNumber(char num) {
+    write_text("1", active_x, active_y, RED, 1);
+}
 
 void homeScreen() {
-    write_text("SUDOKU",130, 40, BLACK, 1);
+    write_text("SUDOKU", 130, 40, BLACK, 1);
     write_text("E - Easy", 120, 70, BLACK, 0);
     write_text("M - Medium", 120, 90, BLACK, 0);
     write_text("H - Hard", 120, 110, BLACK, 0);
