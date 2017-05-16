@@ -46,6 +46,7 @@ int active_cell_x;
 int active_cell_y;
 int active_x;
 int active_y;
+int isWinner;
 char keypress;
 
 void erase(int x, int y, int w, int h);
@@ -71,8 +72,7 @@ int checker(int answer[SIZE][SIZE]);
 
 int main() {
     set_graphics(VGA_320X200X256);
-    // do
-    // {
+    do {
         erase(1,1,400,220);
         homeScreen();
         keypress = (char)getch();
@@ -86,12 +86,15 @@ int main() {
         else if (keypress == HARD_ROUND) {
             randomize(HARD);
         }
-        else if (keypress == QUIT) {
-            exitScreen();
-        }
+        // else if (keypress == QUIT) {
+        //     exitScreen();
+        // }
         game();
         
-    //} while (keypress != QUIT);
+    } while (keypress != QUIT);
+    
+    exitScreen();
+
     return 0;
 }
 
@@ -104,7 +107,8 @@ void game() {
         switch(keypress) {
             case BACK:
                 erase(1,1,400,220);
-                homeScreen();
+                main();
+                //homeScreen();
                 break;
             case UP:
                 moveUP();
@@ -145,9 +149,35 @@ void game() {
             case NINE:
                 writeNumber(NINE);
                 break;
+            case SUBMIT:
+            	if (checker(board) == 1) {
+		            erase(1,1, 400, 220);
+		            write_text("Winner", 120, 50, BLACK, 1);
+		            //exitScreen();
+		        } else {
+		            erase(1,1, 400, 220);
+		            write_text("You Loose", 120, 50, BLACK, 1);
+		            //exitScreen();
+		        }
+		        break;
+		    case QUIT:
+		    	exitScreen();
         }
     }while (keypress != SUBMIT || keypress != QUIT);
+    
     exitScreen();
+
+    if (keypress == SUBMIT) {
+        if (checker(board) == 1) {
+            erase(1,1, 400, 220);
+            write_text("Winner", 120, 50, BLACK, 1);
+        } else {
+            erase(1,1, 400, 220);
+            write_text("You Loose", 120, 50, BLACK, 1);
+        }
+    } else if (keypress == QUIT) {
+        exitScreen();
+    }
 }
 
 void exitScreen() {
@@ -165,6 +195,12 @@ void erase(int x, int y, int w, int h){
 }
 
 void clearCell(int x, int y){
+    int i, j;
+    for (i = x; i < 20; i++) {
+        for (j = y; j < 20; j++) {
+             write_pixel(i,j,WHITE);
+        }
+    }
     write_text("X", active_x, active_y, WHITE, 0);
 }
 
@@ -237,7 +273,7 @@ void findActiveCell() {
     active_y = 10;
     for (i = 0; i < 9; i++) {
         for (j = 0; j < 9; j++) {
-            if (perm_board[i][j] == 0) {
+            if (board[i][j] == 0) {
                 active_cell_x = i;
                 active_cell_y = j;
                 active_x = 100 + (i * 20);
@@ -256,7 +292,7 @@ void findActiveCell() {
 void moveUP() {
     if ((active_cell_x - 1) >= 0) {
         clearCell(active_x,active_y);
-        write_text(" ", active_x, active_y, WHITE, 0);
+        //write_text(" ", active_x, active_y, WHITE, 0);
         while (perm_board[active_cell_x-1][active_cell_y] == 1) {
             active_cell_x -= 1;
             active_y -= 20;
@@ -268,7 +304,7 @@ void moveUP() {
 }
 
 void moveDown() {
-    if ((active_cell_x + 1) < 9) {
+    if ((active_cell_x + 1) < 9 && (active_y + 20) < 200) {
         clearCell(active_x,active_y);
         write_text(" ", active_x, active_y, WHITE, 0);
         while (perm_board[active_cell_x+1][active_cell_y] == 1) {
@@ -282,7 +318,7 @@ void moveDown() {
 }
 
 void moveRight() {
-    if ((active_cell_y + 1) < 9) {
+    if ((active_cell_y + 1) < 9 && (active_x + 20) < 400) {
         clearCell(active_x,active_y);
         write_text(" ", active_x, active_y, WHITE, 0);
         while (perm_board[active_cell_x][active_cell_y+1] == 1) {
@@ -296,7 +332,7 @@ void moveRight() {
 }
 
 void moveLeft() {
-    if ((active_cell_y - 1) >= 0) {
+    if ((active_cell_y - 1) >= 0 && (active_x - 20) >= 100) {
         clearCell(active_x,active_y);
         write_text(" ", active_x, active_y, WHITE, 0);
         while (perm_board[active_cell_x][active_cell_y-1] == 1) {
@@ -314,7 +350,55 @@ void highlightCell() {
 }
 
 void writeNumber(char num) {
-    write_text("1", active_x, active_y, RED, 1);
+	switch(num) {
+		case ONE:
+			clearCell(active_x,active_y);
+            write_text("1|", active_x, active_y, RED, 1);
+            findActiveCell();
+            break;
+        case TWO:
+        	clearCell(active_x,active_y);
+            write_text("2|", active_x, active_y, RED, 1);
+            findActiveCell();
+            break;
+        case THREE:
+        	clearCell(active_x,active_y);
+            write_text("3|", active_x, active_y, RED, 1);
+            findActiveCell();
+            break;
+        case FOUR:
+        	clearCell(active_x,active_y);
+            write_text("4|", active_x, active_y, RED, 1);
+            findActiveCell();
+            break;
+        case FIVE:
+        	clearCell(active_x,active_y);
+            write_text("5|", active_x, active_y, RED, 1);
+            findActiveCell();
+            break;
+        case SIX:
+        	clearCell(active_x,active_y);
+            write_text("6|", active_x, active_y, RED, 1);
+            findActiveCell();
+            break;
+        case SEVEN:
+        	clearCell(active_x,active_y);
+            write_text("7|", active_x, active_y, RED, 1);
+            findActiveCell();
+            break;
+        case EIGHT:
+        	clearCell(active_x,active_y);
+            write_text("8|", active_x, active_y, RED, 1);
+            findActiveCell();
+            break;
+        case NINE:
+        	clearCell(active_x,active_y);
+            write_text("9|", active_x, active_y, RED, 1);
+            findActiveCell();
+            break;
+        default:
+            break;
+	}
 }
 
 void homeScreen() {
